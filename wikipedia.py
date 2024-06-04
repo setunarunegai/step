@@ -84,7 +84,7 @@ class Wikipedia:
                 there_key = True
                 break
         if there_key == False:
-            print("There isn't start page")
+            print(f"title {start} doesn't exists.")
             print()
             return 0
         there_key = False
@@ -94,9 +94,10 @@ class Wikipedia:
                 there_key = True
                 break
         if there_key == False:
-            print("There isn't goal page")
+            print(f"title {goal} doesn't exists.")
             print()
             return 0
+        
         if start == goal:
             print("The shortest path pages are:")
             print([self.titles[start]])
@@ -178,6 +179,6 @@ if __name__ == "__main__":
     wikipedia = Wikipedia(sys.argv[1], sys.argv[2])
     wikipedia.find_longest_titles()
     wikipedia.find_most_linked_pages()
-    #wikipedia.find_shortest_path("渋谷", "パレートの法則")
-    wikipedia.find_shortest_path('A', 'E')
+    wikipedia.find_shortest_path("渋谷", "パレートの法則")
+    #wikipedia.find_shortest_path('A', 'E')
     wikipedia.find_most_popular_pages()
