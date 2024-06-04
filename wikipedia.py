@@ -85,6 +85,7 @@ class Wikipedia:
                 break
         if there_key == False:
             print("There isn't start page")
+            print()
             return 0
         there_key = False
         for id in self.titles.keys():
@@ -94,6 +95,7 @@ class Wikipedia:
                 break
         if there_key == False:
             print("There isn't goal page")
+            print()
             return 0
         if start == goal:
             print("The shortest path pages are:")
@@ -133,25 +135,22 @@ class Wikipedia:
         for id in self.titles.keys():
             pagerank[id] = 1.0
             new_pagerank[id] = 0.0
-        number_page = float(len(pagerank))
+        number_page = len(pagerank)
         distance = number_page
-        while distance > number_page*0.001:
+        while distance > number_page*0.01:
+            others = 0.0
             for id in self.titles.keys():
-                if id in self.links.keys():
-                    links = pagerank[id]*(0.8500/float(len(self.links[id]))+0.1500/number_page)
-                    others = pagerank[id]*0.1500/number_page
-                    for id_id in self.titles.keys():
-                        if id_id in self.links[id]:
-                            new_pagerank[id_id] += links
-                        else:
-                            new_pagerank[id_id] += others
+                if len(self.links[id])>0:
+                    others += pagerank[id]*0.15
+                    for id_id in self.links[id]:
+                        new_pagerank[id_id] += pagerank[id]*0.85/len(self.links[id])
                 else:
-                    others = pagerank[id]/number_page
-                    for id_id in self.titles.keys():
-                        new_pagerank[id_id] += others
+                    others += pagerank[id]
             distance = 0.0
+            others /= number_page
             for id in self.titles.keys():
-                distance += abs(new_pagerank[id]-pagerank[id])
+                new_pagerank[id] += others
+                distance += (new_pagerank[id]-pagerank[id])*(new_pagerank[id]-pagerank[id])
                 pagerank[id] = new_pagerank[id]
                 new_pagerank[id] = 0.0
         print("The popular pages are:")
@@ -179,6 +178,6 @@ if __name__ == "__main__":
     wikipedia = Wikipedia(sys.argv[1], sys.argv[2])
     wikipedia.find_longest_titles()
     wikipedia.find_most_linked_pages()
-    wikipedia.find_shortest_path("渋谷", "パレートの法則")
-    #wikipedia.find_shortest_path('A', 'E')
+    #wikipedia.find_shortest_path("渋谷", "パレートの法則")
+    wikipedia.find_shortest_path('A', 'E')
     wikipedia.find_most_popular_pages()
